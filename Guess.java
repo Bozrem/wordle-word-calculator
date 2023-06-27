@@ -1,19 +1,17 @@
 package org.example;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
+/*
+/ Guess is what will be used in main, and runs a bunch of Game instances
+ */
 
 public class Guess {
-    private final String word;
-    private final String[] endWords;
-    private final ArrayList<String> availableWords;
+    private final Game[] games;
 
-    public Guess(String guess, String[] endWords){
-        word = guess;
-        this.endWords = endWords;
-        availableWords = (ArrayList<String>) Arrays.asList(endWords);
+    public Guess(String guess, String[] endWords) {
+        games = new Game[endWords.length];
+        for (int i = 0; i < games.length; i++) {
+            games[i] = new Game(guess, endWords[i], endWords);
+        } // initialize the games
     } // constructor
 
     /*
@@ -22,22 +20,18 @@ public class Guess {
     /   words to see which ones are still possible answers
      */
 
-    public void eliminate(){
-        for (int i = 0; i < availableWords.size(); i++){
-            int[] colors = Game.getColors(word, availableWords.get(i));
-
-
-
-
-        } // sorts through each possible answer
+    public void runGames() {
+        for (Game g : games) {
+            g.run();
+        }
     }
 
-
-
-
-
-    private double getPercentRemoved(){
-        return 100 * ((double)(endWords.length - availableWords.size())/endWords.length);
+    public double getPercentRemoved() {
+        double sum = 0;
+        for (Game g : games) {
+            sum += g.getScore();
+        }
+        return sum / games.length;
     }
 
 
