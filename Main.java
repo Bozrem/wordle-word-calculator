@@ -24,7 +24,9 @@ public class Main {
         while (gameLoop) {
             System.out.println("\nEnter the word to score. Must contain 5 alphabetical letters");
             String guess = getGuess();
-            System.out.println(getScore(guess));
+
+            System.out.println("\n\n\n\n\n\n\n\n\nCalculating score of " + guess.toUpperCase() + ". Please wait...");
+            System.out.println(guess.toUpperCase() + " received an average of " + getScore(guess) + "% answers removed!");
             gameLoop = continuePlaying();
         }
         printOutro();
@@ -73,14 +75,14 @@ public class Main {
         if (isValidGuessLength(guess) && isValidGuessCharacters(guess) && isInWordle(guess)) {
             return true;
         }
-        System.out.println("Invalid Entry! Please try again");
+        System.out.println("Please try again");
         return false;
     }
 
     private static boolean isValidGuessCharacters(String guess) {
         for (int i = 0; i < guess.length(); i++) {
             if (!"abcdefghijklmnopqrstuvwxyz".contains(String.valueOf(guess.charAt(i)))) {
-                System.out.println("Invalid characters!");
+                System.out.println("Non-alphabetical characters!");
                 return false;
             }
         }
@@ -88,11 +90,19 @@ public class Main {
     }
 
     private static boolean isValidGuessLength(String guess) {
-        return guess.length() == 5;
+        if (guess.length() == 5) {
+            return true;
+        }
+        System.out.println("The guess must be 5 characters in length!");
+        return false;
     }
 
     private static boolean isInWordle(String guess) {
-        return validGuessWords.contains(guess);
+        if (validGuessWords.contains(guess)) {
+            return true;
+        }
+        System.out.println(guess + " is not an allowed guess in Wordle!");
+        return false;
     }
 
     private static double getScore(String guess) throws IOException {
