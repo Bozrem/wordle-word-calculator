@@ -1,17 +1,24 @@
 package org.example;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Scanner;
 
 
 public class Main {
     static Scanner scan = new Scanner(System.in);
+    static HashSet<String> validGuessWords;
 
     public static void main(String[] args) throws IOException {
+
+        validGuessWords = readGuessWords();
+
         printIntro();
         boolean gameLoop = true;
         while (gameLoop) {
@@ -21,6 +28,21 @@ public class Main {
             gameLoop = continuePlaying();
         }
         printOutro();
+    }
+
+    public static HashSet<String> readGuessWords() {
+        HashSet<String> hashSet = new HashSet<>();
+
+        try (BufferedReader reader = new BufferedReader(new FileReader("guessWords.txt"))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                hashSet.add(line);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return hashSet;
     }
 
     public static String[] readEndWords() throws IOException {
@@ -47,7 +69,8 @@ public class Main {
     }
 
     private static boolean isValidGuess(String guess) {
-        if (isValidGuessLength(guess) && isValidGuessCharacters(guess)) {
+        // I assume you'll be using isInWordle here, included for testing
+        if (isValidGuessLength(guess) && isValidGuessCharacters(guess) && isInWordle(guess)) {
             return true;
         }
         System.out.println("Invalid Entry! Please try again");
@@ -66,6 +89,10 @@ public class Main {
 
     private static boolean isValidGuessLength(String guess) {
         return guess.length() == 5;
+    }
+
+    private static boolean isInWordle(String guess) {
+        return validGuessWords.contains(guess);
     }
 
     private static double getScore(String guess) throws IOException {
