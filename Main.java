@@ -12,19 +12,17 @@ import java.util.Scanner;
 
 
 public class Main {
+
     static Scanner scan = new Scanner(System.in);
     static HashSet<String> validGuessWords;
 
     public static void main(String[] args) throws IOException {
-
         validGuessWords = readGuessWords();
-
         printIntro();
         boolean gameLoop = true;
         while (gameLoop) {
             System.out.println("\nEnter the word to score. Must contain 5 alphabetical letters");
             String guess = getGuess();
-
             System.out.println("\n\n\n\n\n\n\n\n\nCalculating score of " + guess.toUpperCase() + ". Please wait...");
             System.out.println(guess.toUpperCase() + " received an average of " + getScore(guess) + "% answers removed!");
             gameLoop = continuePlaying();
@@ -105,11 +103,33 @@ public class Main {
         return false;
     }
 
+    private static void buildGames(String guess, Game[] games) throws IOException {
+        String[] endWords = readEndWords();
+        for (int i = 0; i < games.length; i++) {
+            games[i] = new Game(guess, endWords[i], endWords);
+        }
+    }
+
+    public static void runGames(Game[] games) {
+        for (Game game : games) {
+            game.run();
+        }
+    }
+
     private static double getScore(String guess) throws IOException {
         String[] endWords = readEndWords();
-        Guess gameGuess = new Guess(guess, endWords);
-        gameGuess.runGames();
-        return Math.round(gameGuess.getPercentRemoved() * 100.0) / 100.0;
+        final Game[] games = new Game[endWords.length];
+        buildGames(guess, games);
+        runGames(games);
+        return Math.round(getPercentRemoved(games) * 100.0) / 100.0;
+    }
+
+    public static double getPercentRemoved(Game[] games) {
+        double sum = 0;
+        for (Game game : games) {
+            sum += game.getScore();
+        }
+        return sum / games.length;
     }
 
     private static boolean continuePlaying() {
