@@ -7,8 +7,6 @@ Uses the available answers and usable guesses to score a starting Wordle guess w
 The algorithm works by averaging results from simulated wordle games using the inputted guess. Within each simulated game, the situation is rated by generating colors for the guessed letters, and eliminating the answers that cannot work under the color conditions.
 
 ### Possible future features:
-- Check if guess can be used in Wordle
-- Ability to continue with the game after a first guess
 - Database of all first guesses
 - Code readability improvements
 - Full game ratings
