@@ -3,6 +3,15 @@ package org.example;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+
+/*
+To improve and clean up
+- Separate and streamline individual color checks
+- Make color a class variable or its own class instead of weird array
+- Reword function names
+- Reword variable and loop variable names (not i or e)
+- Divide run() function
+ */
 public class Game {
     private final String guess;
     private final String answer;
@@ -72,6 +81,8 @@ public class Game {
     public double getScore() {
         return 100 * (1 - (double) availableWords.size() / originalLength); // returns the percentage removed in the game
     }
+
+
 
 
 }
